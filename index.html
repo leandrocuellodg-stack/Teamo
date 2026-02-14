@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Nath ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdfcf8; /* Beige crema muy claro */
+            --text-main: #5d4037; /* Marrón café moderno */
+            --accent-red: #ff8a80; /* Rojo pastel */
+            --accent-pink: #ffcdd2;
+            --pastelle-green: #dcedc8; /* Verde pastel para la pradera */
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- Fotos Laterales en forma de Corazón --- */
+        .side-photo {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 150px;
+            background-color: #eee;
+            z-index: 50;
+            object-fit: cover;
+            /* Esto crea la forma de corazón en la foto */
+            clip-path: path("M75,150 C75,150 150,110 150,60 C150,20 120,0 95,0 C75,0 75,20 75,20 C75,20 75,0 55,0 C30,0 0,20 0,60 C0,110 75,150 75,150 Z");
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .side-photo:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .photo-left { left: 40px; }
+        .photo-right { right: 40px; }
+
+        /* Ocultar fotos laterales en celulares para que no estorben */
+        @media (max-width: 1100px) {
+            .side-photo { display: none; }
+        }
+
+        /* --- Lluvia de corazones (Fondo) --- */
+        #heart-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .falling-heart {
+            position: absolute;
+            top: -20px;
+            color: var(--accent-pink);
+            font-size: 20px;
+            opacity: 0.5;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh) rotate(360deg); }
+        }
+
+        /* --- Pantalla de Inicio (Overlay) --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.8s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .intro-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .meadow-container {
+            width: 300px;
+            height: 300px;
+            background-color: var(--pastelle-green);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .meadow-gif {
+            width: 120%; /* Un poco más grande para llenar */
+            height: auto;
+        }
+
+        .click-hint {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #999;
+            animation: bounce 2s infinite;
+        }
+
+        /* --- Contenido Principal --- */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            position: relative;
+            z-index: 10;
+            padding-bottom: 100px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Sección Superior: Árbol y Datos */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        /* Árbol Moderno CSS */
+        .tree-wrapper {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .trunk {
+            width: 12px;
+            height: 150px;
+            background-color: #8d6e63;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        /* Ramas simplificadas */
+        .trunk::before {
+            content: ''; position: absolute; top: 20px; left: -20px;
+            width: 40px; height: 4px; background: #8d6e63; transform: rotate(-30deg);
+        }
+        .trunk::after {
+            content: ''; position: absolute; top: 50px; right: -20px;
+            width: 40px; height: 4px; background: #8d6e63; transform: rotate(30deg);
+        }
+
+        .leaves-container {
+            position: absolute;
+            top: 0;
+            width: 280px;
+            height: 250px;
+        }
+
+        .leaf-heart {
+            position: absolute;
+            color: var(--accent-red);
+            font-size: 24px;
+            animation: floatHeart 3s ease-in-out infinite;
+        }
+        
+        .leaf-heart:nth-child(2n) { color: var(--accent-pink); animation-delay: 0.5s; }
+        .leaf-heart:nth-child(3n) { color: #ff80ab; animation-delay: 1s; }
+
+        @keyframes floatHeart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Panel de Texto */
+        .info-panel {
+            text-align: left;
+            max-width: 400px;
+        }
+
+        .typewriter {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.3;
+            min-height: 100px;
+            margin-bottom: 20px;
+        }
+        
+        .text-red { color: #e53935; }
+        .text-grey { color: #455a64; }
+
+        .counter-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            border: 1px solid #f0f0f0;
+        }
+
+        .days-big {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            line-height: 1;
+            display: block;
+        }
+
+        .days-label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .date-start {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        /* --- Video --- */
+        .video-container {
+            width: 100%;
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .video-frame {
+            width: 100%;
+            max-width: 700px;
+            aspect-ratio: 9/16;
+            background: #fff;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            object-fit: cover;
+        }
+
+        /* --- Carta --- */
+        .letter-section {
+            margin-top: 60px;
+            width: 100%;
+            max-width: 700px;
+            position: relative;
+        }
+
+        .letter-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--accent-red);
+            position: relative;
+        }
+
+        .letter-title {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .letter-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+            white-space: pre-line; /* Respeta los saltos de linea */
+        }
+
+        /* Decoración Milk and Mocha abajo */
+        .gifs-footer {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: -30px; /* Para que se superpongan un poco a la carta o al fondo */
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .gif-decoration {
+            width: 120px;
+            height: auto;
+        }
+
+        /* Animaciones */
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .hero-section { flex-direction: column; text-align: center; }
+            .info-panel { text-align: center; }
+            .letter-card { padding: 25px; }
+            .gifs-footer { justify-content: center; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="img/img1.jpg" class="side-photo photo-left" alt="Foto Izquierda">
+    <img src="img/img2.jpg" class="side-photo photo-right" alt="Foto Derecha">
+
+    <div id="heart-rain"></div>
+
+    <div id="intro-overlay" onclick="startExperience()">
+        <h1 class="intro-title">Feliz San Valentín mi Nath</h1>
+        
+        <div class="meadow-container">
+            <img src="img/lpg.gif" alt="Ositos corriendo" class="meadow-gif">
+        </div>
+
+        <p class="click-hint">Haz click para entrar ❤️</p>
+    </div>
+
+    <div id="main-content">
+        <div class="container">
+            
+            <div class="hero-section">
+                <div class="tree-wrapper">
+                    <div class="leaves-container" id="leaves-container">
+                        </div>
+                    <div class="trunk"></div>
+                </div>
+
+                <div class="info-panel">
+                    <div class="typewriter" id="typewriter"></div>
+                    
+                    <div class="counter-card">
+                        <span class="days-big" id="days-count">0</span>
+                        <span class="days-label">Días desde nuestro inicio</span>
+                        <div class="date-start">10 de Marzo, 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-container">
+                <div class="video-frame">
+                    <video controls>
+                        <source src="video/0214.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <div class="letter-section">
+                <div class="letter-card">
+                    <div class="letter-title">Para ti, mi amor...</div>
+                    <div class="letter-content">
+Querida Nathaly Valentina Marquez Peña,
+
+Mi Amor, la verdad no tengo palabras para describir mi felicidad al verte. El que seas mi novia es motivo para agradecerle a Dios y a la vida aquel mes de marzo del cual un simple tweet cambió mi vida. Eres única, especial, divertida, inteligente, graciosa, hermosa y muy habladora jajaja. Amo eso y todo de ti. En estos momentos lo que más me frustra es no poder abrazarte, pero con el favor de Diosito, sé que pronto lo cumpliré. Te amo y feliz San Valentín, porque eres el amor de mi vida.
+
+Eres la persona que ilumina mis días, y este San Valentín es solo el primero de muchos. Gracias por ser mi compañera, mi risa favorita y mi lugar seguro.
+
+Te amo infinitamente, de parte de tu Bot, digo, Novio Leandro.
+                    </div>
+                </div>
+                <br>
+                <div class="gifs-footer">
+                    <img src="img/milk-and-mocha-gif-mocha-makeing-love.gif" class="gif-decoration" alt="Love bear">
+                    
+                    <img src="img/5d6babaeb7c9428cc80e6b858f9e0edf.gif" class="gif-decoration" alt="Love bear">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- FECHA DE INICIO ---
+        const startDate = new Date('2025-04-10T00:00:00');
+
+        // --- GENERAR CORAZONES DEL ÁRBOL ---
+        function generateTreeLeaves() {
+            const container = document.getElementById('leaves-container');
+            // Posiciones relativas para formar la copa del árbol
+            const positions = [
+                {t: 10, l: 50}, {t: 20, l: 30}, {t: 20, l: 70}, 
+                {t: 40, l: 20}, {t: 40, l: 50}, {t: 40, l: 80},
+                {t: 60, l: 30}, {t: 60, l: 70}, {t: 70, l: 50},
+                {t: 30, l: 40}, {t: 50, l: 60}, {t: 15, l: 60},
+                {t: 55, l: 15}, {t: 55, l: 85}, {t: 80, l: 40},
+                {t: 10, l: 50}, {t: 20, l: 30}, {t: 20, l: 35},
+                {t: 10, l: 50}, {t: 20, l: 30}, {t: 20, l: 70}
+            ];
+
+            positions.forEach(pos => {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤';
+                heart.classList.add('leaf-heart');
+                // Ajustar posiciones
+                heart.style.top = pos.t + '%';
+                heart.style.left = pos.l + '%';
+                // Tamaño variable
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                container.appendChild(heart);
+            });
+        }
+
+        // --- LLUVIA DE CORAZONES FONDO ---
+        function createRain() {
+            const container = document.getElementById('heart-rain');
+            const heart = document.createElement('div');
+            heart.classList.add('falling-heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+            heart.style.fontSize = Math.random() * 10 + 10 + 'px';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 7000);
+        }
+        setInterval(createRain, 300);
+
+        // --- CONTADOR ---
+        function startCounter() {
+    const diffDays = 343; // Número fijo de días
+    
+    const element = document.getElementById('days-count');
+    let current = 0;
+    const timer = setInterval(() => {
+        current += Math.ceil(diffDays / 40); // Incremento para llegar en ~40 pasos
+        if(current >= diffDays) {
+            current = diffDays;
+            clearInterval(timer);
+        }
+        element.innerText = current;
+    }, 40);
+}
+
+        // --- ESCRITURA ---
+        async function typeWriter() {
+            const textHTML = "<span class='text-red'>¡Feliz San Valentín!</span><br><span class='text-grey'>Mi amor por ti es infinito...</span>";
+            const div = document.getElementById('typewriter');
+            
+            // Simulación simple para no complicar con etiquetas HTML dentro del loop
+            div.innerHTML = textHTML;
+            div.style.opacity = 0;
+            
+            // Fade in suave
+            let op = 0;
+            const timer = setInterval(() => {
+                if (op >= 1){
+                    clearInterval(timer);
+                }
+                div.style.opacity = op;
+                op += 0.05;
+            }, 50);
+        }
+
+        // --- INICIO ---
+        function startExperience() {
+            document.getElementById('intro-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro-overlay').style.display = 'none';
+                const main = document.getElementById('main-content');
+                main.style.display = 'block';
+                
+                setTimeout(() => {
+                    main.style.opacity = '1';
+                    generateTreeLeaves();
+                    startCounter();
+                    typeWriter();
+                }, 100);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
